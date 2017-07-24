@@ -1,0 +1,72 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <script src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
+    <script src="{% static 'js/handlebars-v4.0.5.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <link href="{% static 'css/admin.css' %}" rel="stylesheet">
+</head>
+<body>
+
+
+<div class="col-md-2 col-md-offset-0 admin-left-menubg">
+<div class="sidebar-menu">
+							<nav id="menu" class="nav-main opened" role="navigation">
+								<ul class="nav nav-sidebar">
+									<div class="panel-body text-center">
+										<div class="flag admin-left-logo">
+											Friend Web 网站后台
+										</div>
+									</div>
+									<li class="active opened">
+										<a href="/admin/">
+											<i class="fa fa-laptop" aria-hidden="true"></i><span>管理首页</span>
+										</a>
+									</li>
+
+									<li class="nav-parent admin-left-group">
+										<a class="admin-left-group-title">
+											<i class="fa fa-copy" aria-hidden="true"></i><span>用户管理</span>
+										</a>
+                                        <ul class="nav nav-children">
+											<li><a href="/admin/user/"><span class="text"> 用户编组管理</span></a></li>
+                                        </ul>
+										<ul class="nav nav-children">
+											<li><a href="/admin/add_usergroup/"><span class="text"> 用户编组管理</span></a></li>
+                                        </ul>
+									</li>
+
+
+
+								</ul>
+							</nav>
+</div>
+</div>
+<div class="col-md-10">
+{% block content %}
+
+{% endblock %}
+</div>
+
+<script>
+    $(function(){
+       $("#btn-index").click(function(){
+           window.location.href='/member/admin/';
+       });
+        $("#btn-add").click(function(){
+           window.location.href='/member/add_usergroup/';
+       });
+    });
+</script>
+
+
+{% block script %}
+
+{% endblock %}
+</body>
+</html>

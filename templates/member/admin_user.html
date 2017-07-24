@@ -1,0 +1,36 @@
+{% extends 'member/admin_base.html' %}
+
+{% block content %}
+ <div class="form-group">
+
+</div>
+<ol class="breadcrumb">
+  <li><a href="/admin/">后台首页</a></li>
+  <li><a href="#">用户管理</a></li>
+</ol>
+
+<div class="panel panel-primary">
+  <div class="panel-heading">用户列表</div>
+  <div class="panel-body">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>用户昵称</th>
+                <th>email</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in userlist %}
+            <tr>
+                <td>{{ user.username }}</td>
+                <td>{{ user.email }}</td>
+                <td><a href="/admin/edit_user/?id={{ user.id }}" class="btn btn-warning">编辑</a> <a href="/admin/delete_user/?id={{ user.id }}" class="btn btn-danger">删除</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+  </div>
+</div>
+{% endblock %}

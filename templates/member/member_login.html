@@ -1,0 +1,69 @@
+{% extends 'ajax_blog/base.html' %}
+
+{% block content %}
+    <div class="col-md-8 col-md-offset-2">
+    <div class="form-group">
+
+    </div>
+    <ol class="breadcrumb">
+        <li><a href="/">首页</a></li>
+        <li><a href="#">用户登入</a></li>
+    </ol>
+
+    <div class="panel panel-primary" id="reg-info">
+        <div class="panel-heading">用户登入</div>
+        <div class="panel-body">
+            <form>
+                <div class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon3">用户</span>
+                        <input type="text" class="form-control" name="username" aria-describedby="basic-addon3">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon3">密码</span>
+                        <input type="password" class="form-control" name="password" aria-describedby="basic-addon3">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                        <span id="err_msg" class="form-error"></span>
+                    </div>
+                </div>
+
+                <input type="hidden" class="form-control" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+                <button type="button" id="login-btn" class="btn btn-primary">登入</button>
+            </form>
+
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block script %}
+    <script>
+        $(function () {
+            $("#login-btn").click(function () {
+                $.ajax({
+                    type: "POST",
+                    url: "/member/login/",
+                    data: $(".form-control").serializeArray(),
+                    dataType: "json",
+                    success: function (data, textStatus) {
+                        console.log(data);
+                        if (data.statu == 1) {
+                            window.location.href = '/member/';
+                        } else {
+                            var kid = data.msg;
+                            $('#err_msg').html(kid);
+                        }
+                    }
+                });
+            });
+
+        });
+    </script>
+    </div>
+{% endblock %}

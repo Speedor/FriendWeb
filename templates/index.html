@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}
+首页
+{% endblock %}
+
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-9">
+            {% for blog in blog_list %}
+                <div class="col-md-4">
+                    <a href="/detail_blog/?id={{ blog.id }}" class="thumbnail">
+                      <img src="{{ blog.pic.pic.url }}">
+                    </a>
+                    <div class="caption">
+                      <h4>{{ blog.title }}</h4>
+
+                      <p><a href="/detail_blog/?id={{ blog.id }}" class="btn btn-success" role="button">查看详情</a></p>
+                    </div>
+                </div>
+
+
+            {% endfor %}
+        </div>
+        <div class="col-md-3">
+            <ul class="nav nav-pills nav-stacked">
+                {% for item in sort_list %}
+                    <li role="sort"{% if currentid == item.id %} class="active"{% endif %}><a href="/?sort={{ item.id }}">{{ item.sort_name }}</a></li>
+                 {% endfor %}
+              </ul>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block script %}
+<script>
+    $(function(){
+     $($("#menu")[0].children[0]).addClass('active');
+    });
+</script>
+{% endblock %}

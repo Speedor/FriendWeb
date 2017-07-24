@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}博文详情{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 col-sm-offset-2">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                <h3 class="panel-title">标题：{{ blog.title }}</h3>
+                </div>
+                <div class="panel-body">
+                    作者：{{ blog.user }}
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>分类：{{ blog.sort.sort_name }}&nbsp;&nbsp;&nbsp;</li>
+                    </ul>
+                    <hr>
+                    <img src="{{ blog.pic.pic.url }}" width="100%">
+                    <hr>
+                    <div id="content"></div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'fckeditor/ckeditor.js' %}"></script>
+     <script>
+
+        $(function(){
+
+            var str = $('<div>').html('{{ blog.content }}').text();
+            $('#content').html(str);
+        });
+     </script>
+{% endblock %}

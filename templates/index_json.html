@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}
+首页
+{% endblock %}
+
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-9">
+            <div class="col-md-9" id="container">
+            </div>
+            <script id="tpl" type="text/x-handlebars-template">
+            </script>
+        </div>
+        <div class="col-md-3">
+            <ul class="nav nav-pills nav-stacked">
+                {% for item in sort_list %}
+                    <li role="sort"{% if currentid == item.id %} class="active"{% endif %}><a href="/?sort={{ item.id }}">{{ item.sort_name }}</a></li>
+                 {% endfor %}
+              </ul>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block script %}
+        <script src="{% static 'js/handlebars-v4.0.5.js' %}"></script>
+<script>
+    $.ajaxSetup({
+           data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+    });
+
+    function read_json(api, tpId,tpPath, container)
+    {
+        $(tpId).load(tpPath, function(){
+            $.ajax({
+                 type: "POST",
+                 url: api,
+                 data: {},
+                 dataType: "json",
+                 success: function(data,textStatus){
+                    console.log(textStatus);
+                    //用jquery获取模板
+                    var tpl = $(tpId).html();
+                    console.log(tpl);
+                    //预编译模板
+                    var template = Handlebars.compile(tpl);
+
+                    //模拟json数据
+                    var context = data;
+                    //匹配json内容
+                    var html = template(context);
+                    console.log(html);
+                    //输入模板
+                    $(container).html(html);
+                 },
+                 error:function(XMLHttpRequest, textStatus, errorThrown){
+                     console.log("error",XMLHttpRequest, textStatus, errorThrown);
+                 }
+            });
+        });
+    }
+    $(function(){
+        $($("#menu")[0].children[0]).addClass('active');
+        read_json("/index_api/", "#tpl", "static/json/blog.html","#container");
+    });
+</script>
+{% endblock %}

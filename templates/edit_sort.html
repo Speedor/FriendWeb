@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}编辑分类{% endblock %}
+
+{% block content %}
+    <div class="container">
+    <div class="row">
+        <div class="col-md-8 col-sm-offset-2">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                <h3 class="panel-title">编辑分类</h3>
+                </div>
+                <div class="panel-body">
+                    {% load widget_tweaks %}
+    <form method="post">
+        {% csrf_token %}
+        {% if sort %}
+            <input type="hidden" name="id" value="{{ sort.id }}"/>
+            <div class="form-group">
+                <div class="input-group">
+                    <input type="text" name="sort_name" value="{{ sort.sort_name }}" class="form-control"/>
+
+                </div>
+            </div>
+        {% else %}
+            <input type="hidden" name="id" value="{{ form.id.value }}"/>
+           <div class="form-group">
+                <div class="input-group">
+                    <input type="text" name="sort_name" value="{{ form.sort_name.value }}" class="form-control"/>
+               </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group my-error">
+                    {{ form.errors.sort_name }}
+             </div>
+            </div>
+        {% endif %}
+    <div class="form-group">
+        <input type="submit" value="保存分类" class="btn btn-primary my-btn">
+         </div>
+    </form>
+</div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

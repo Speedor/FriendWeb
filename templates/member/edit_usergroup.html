@@ -1,0 +1,108 @@
+{% extends 'member/admin_base.html' %}
+
+{% block content %}
+ <div class="form-group">
+
+</div>
+<ol class="breadcrumb">
+  <li><a href="/admin/">后台首页</a></li>
+  <li><a href="#">用户编组管理</a></li>
+</ol>
+
+<div class="panel panel-primary">
+  <div class="panel-heading">编辑用户编组</div>
+  <div class="panel-body">
+    <form>
+        <div class="input-group">
+            <label for="info" class="input-group-addon">用户编组名</label>
+            <input type="text" id="info" class="form-control" value="{{ UserGroup.name }}">
+
+        </div>
+        <div class="input-group admin-form-error" id="info-error">
+
+        </div>
+        <div class="form-group">
+
+        </div>
+        <div class="input-group">
+        <label for="list-group">选择该编组需要的权限</label>
+            <div class="list-group">
+            {% load active_css_tags %}
+                {% for item in user_permission %}
+                  <a href="#" info="{{ item.id }}" class="list-group-item {% active_css item.id UserGroup.permission %}{{ active_css }}">
+                    {{ item.info }}
+                  </a>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="form-group admin-form-error" id="permission-error">
+
+        </div>
+        <div class="input-group">
+            <button type="button" id="btn-save" class="btn btn-primary">保存用户分组</button>
+        </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+{% block script %}
+<script>
+var arr = new Array();
+$.ajaxSetup({
+   data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+});
+$(function(){
+    $(".list-group a").click(function(){
+
+       var _id = $(this).attr("info");
+       console.log(_id);
+       if($(this).hasClass('active'))
+       {
+           $(this).removeClass('active');
+           for(var i=0;i<arr.length; i++)
+           {
+               if(arr[i] == _id)
+               {
+                   arr.splice(i, 1);
+               }
+           }
+
+       }else{
+           $(this).addClass('active');
+           arr.push(_id);
+       }
+        console.log(arr);
+
+   });
+
+    $("#btn-save").click(function(){
+
+      $.ajax({
+             type: "POST",
+             url: "/admin/edit_usergroup/",
+             data: {"info":$("#info").val(),
+                 "permission":arr.toString(),
+                 "id":{{ UserGroup.id }}},
+             dataType: "json",
+             success: function(data,textStatus){
+
+                 if(data.statu == 1){
+                    window.location.href='/admin/add_usergroup/';
+                 }else{
+                     //因为 django 是存在错误才会把错误信息发送给前端
+                     //这里判断json通讯包中有错误字段才显示错误
+                     if(data.form.info != undefined)
+                     {
+                         $("#info-error").html(data.form.info);
+                     }
+                     if(data.form.permission != undefined)
+                     {
+                        $("#permission-error").html(data.form.permission);
+                     }
+                 }
+             }
+         });
+   });
+});
+</script>
+{% endblock %}

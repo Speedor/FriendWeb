@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% block title %}登入{% endblock %}
+
+{% block content %}
+<style>
+    .my-btn{
+        width:100%;
+    }
+    .my-error{
+        color:#ff0000;
+    }
+    .my-error li{
+        list-style:none;
+    }
+</style>
+    <div class="container">
+    <div class="row">
+         <div class="col-md-4 col-sm-offset-4">
+             <div class="panel panel-primary">
+                  <div class="panel-heading">
+                    <h3 class="panel-title">登入</h3>
+                  </div>
+                  <div class="panel-body">
+
+
+                        <form method="post">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <div class="input-group">
+                                <label for="username" class="input-group-addon">用户</label>
+                                {#  需要安装 django框架 的第三方 模版过滤器 库 pip install django-widget-tweaks  #}
+                                {#  然后执行下边的导入  #}
+                                {% load widget_tweaks %}
+                                {#  然后使用自定义过滤器方法添加了一个  form-control 样式 #}
+                                {% render_field form.username class="form-control" %}
+
+
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="input-group">
+                            <label for="password" class="input-group-addon">密码</label>
+                            {% render_field form.password class="form-control" style="-webkit-text-security: disc;"%}
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group my-error">
+                            {{ form.errors.username }}
+                            {{ form.errors.password }}
+                          </div>
+                        </div>
+                        <div class="form-group">
+
+                                <input type="submit" value="登入" class="btn btn-primary my-btn">
+
+                        </div>
+                        </form>
+                      </div>
+                 </div>
+             </div>
+        </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,10 @@
+{% if user.is_logined %}
+    <li><a href="/ajax/">管理中心</a></li>
+    <li><a href="/ajax/add_sort/">添加分类</a></li>
+    <li><a href="/ajax/add_blog/">添加博文</a></li>
+    <li><a href="#">欢迎你，{{ user.username }}!</a></li>
+    <li><a href="/member/logout/">退出</a></li>
+{% else %}
+    <li><a href="/member/reg/">注册</a></li>
+    <li><a href="/member/login/">登入</a></li>
+{% endif %}

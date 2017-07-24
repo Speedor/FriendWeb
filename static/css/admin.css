@@ -1,0 +1,33 @@
+.admin-left-menubg{
+    background-color: #0f74a8;
+    min-height: 650px;
+}
+
+.admin-left-menubg a{
+    color: #ffffff;
+}
+
+.admin-left-menubg a:hover{
+    color: #444444;
+}
+
+.admin-left-logo{
+   color: #ffffff;
+   font-family: "Arial Black";
+    font-weight: bold;
+}
+
+.admin-form-error{
+    color:#ff0000;
+    font-size: 13px;
+}
+
+.admin-left-group{
+    background-color: #0d5378;
+    border-radius:10px;
+}
+
+.admin-left-group-title{
+    background-color: #093b55;
+    border-radius: 10px 10px 5px 5px;
+}

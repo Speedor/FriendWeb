@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block content %}
+<div class="container">
+<div class="row">
+     <div class="col-md-8 col-sm-offset-2">
+         <div class="panel panel-primary">
+            <div class="panel-heading">
+            <h3 class="panel-title">添加博文</h3>
+            </div>
+            <div class="panel-body">
+                <form>
+
+                    <div class="form-group">
+                        <div class="input-group">
+                            <label for="sort_id" class="input-group-addon">博文分类</label>
+                            <select id="sort_id" class="form-control">
+                                {% for item in sort_list %}
+                                    <option value="{{ item.id }}">{{ item.sort_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                            <div class="input-group">
+                                <button type="button" id="upload_btn" class="btn btn-success">
+                                  上传图片
+                                </button>
+                                <img src="" id="img_obj" width="120" height="120">
+                                <input id="fileupload" type="file" name="pic" style="display: none;"
+                                    data-url="/upload/"
+                                    data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}"}'>
+                            </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <label for="title" class="input-group-addon">博文标题</label>
+                            <input id="title" class="form-control">
+                        </div>
+                    </div>
+
+                     <div class="form-group">
+                        <label for="content">博文内容</label>
+                        <textarea id="content" name="content"></textarea>
+                     </div>
+
+                    <div class="form-group">
+                        <div class="input-group my-error">
+                        {% if form %}
+                        {{ form.errors }}
+                        {% endif %}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <input type="button" id="btn" value="保存博文" class="btn btn-primary my-btn">
+                    </div>
+                    </form>
+                </div>
+             </div>
+         </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'upload/jquery.ui.widget.js' %}"></script>
+    <script src="{% static 'upload/jquery.iframe-transport.js' %}"></script>
+    <script src="{% static 'upload/jquery.fileupload.js' %}"></script>
+    <script src="{% static 'upload/progress-bar-upload.js' %}"></script>
+
+     <script src="{% static 'fckeditor/ckeditor.js' %}"></script>
+     <script>
+        $.ajaxSetup({
+           data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+        });
+        $(function(){
+            $($("#menu")[0].children[3]).addClass('active');
+            CKEDITOR.replace('content');
+            $("#btn").click(function(){
+                $.ajax({
+                 type: "POST",
+                 url: "/add_blog/",
+                 data: {
+                     'sort_id':$("#sort_id").val(),
+                     'title':$("#title").val(),
+                     'content':CKEDITOR.instances.content.getData()
+                        },
+                 dataType: "json",
+                 success: function(data,textStatus){
+
+                    if(data.status == 1)
+                    {
+                        window.location.href="/manage/";
+                    }else{
+
+                    }
+                 },
+                 error:function(XMLHttpRequest, textStatus, errorThrown){
+
+                 }
+            });
+            });
+        });
+     </script>
+{% endblock %}

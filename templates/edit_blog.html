@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}编辑博文{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+         <div class="col-md-8 col-sm-offset-2">
+             <div class="panel panel-primary">
+                <div class="panel-heading">
+                <h3 class="panel-title">编辑博文</h3>
+                </div>
+                <div class="panel-body">
+                <form method="post">
+                    {% csrf_token %}
+                    {% if blog %}
+                        <input type="hidden" id="id" value="{{ blog.id }}"/>
+                        <div class="form-group">
+                            <div class="input-group">
+                            <label for="sort_id" class="input-group-addon">博文分类</label>
+                            <select id="sort_id" class="form-control">
+                                {% for item in sort_list %}
+                                    <option value="{{ item.id }}" {% if item.id == blog.sort_id %}selected{% endif %}>{{ item.sort_name }}</option>
+                                {% endfor %}
+                            </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                                        <div class="input-group">
+                                            <button type="button" id="upload_btn" class="btn btn-success">
+                                              上传图片
+                                            </button>
+                                            <img src="{{ blog.pic.pic.url }}" id="img_obj" width="120" height="120">
+                                            <input id="fileupload" type="file" name="pic" style="display: none;"
+                                                data-url="/upload/"
+                                                data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}"}'>
+                                        </div>
+                                </div>
+                        <div class="form-group">
+                            <div class="input-group">
+                            <label for="title" class="input-group-addon">博文标题</label>
+                            <input id="title" value="{{ blog.title }}" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="content">博文内容</label>
+                            <textarea id="content" name="content"></textarea>
+                        </div>
+
+                    {% endif %}
+                    <div class="form-group">
+                    <input type="button" id="btn" value="保存博文修改" class="btn btn-primary my-btn">
+                    </div>
+                </form>
+                </div>
+             </div>
+         </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+        <script src="{% static 'upload/jquery.ui.widget.js' %}"></script>
+    <script src="{% static 'upload/jquery.iframe-transport.js' %}"></script>
+    <script src="{% static 'upload/jquery.fileupload.js' %}"></script>
+    <script src="{% static 'upload/progress-bar-upload.js' %}"></script>
+    <script src="{% static 'fckeditor/ckeditor.js' %}"></script>
+     <script>
+        $.ajaxSetup({
+           data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+        });
+        $(function(){
+            CKEDITOR.replace('content');
+            var str = $('<div>').html('{{ blog.content }}').text();
+            CKEDITOR.instances.content.setData(str);
+
+
+            $("#btn").click(function(){
+                $.ajax({
+                 type: "POST",
+                 url: "/edit_blog/",
+                 data: {
+                     'id':$("#id").val(),
+                     'sort_id':$("#sort_id").val(),
+                     'title':$("#title").val(),
+                     'content':CKEDITOR.instances.content.getData()
+                        },
+                 dataType: "json",
+                 success: function(data,textStatus){
+
+                    if(data.status == 1)
+                    {
+                        window.location.href="/manage/";
+                    }else{
+
+                    }
+                 },
+                 error:function(XMLHttpRequest, textStatus, errorThrown){
+
+                 }
+            });
+            });
+        });
+     </script>
+{% endblock %}
